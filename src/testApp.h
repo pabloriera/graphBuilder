@@ -2,6 +2,7 @@
 
 #include "graph.h"
 #include "ofMain.h"
+#include "ofxXmlSettings.h"
 
 class testApp : public ofBaseApp{
 
@@ -25,4 +26,6 @@ class testApp : public ofBaseApp{
 
         ofImage background;
         float z, z0;
+
+        ofxXmlSettings XLM;
 };
