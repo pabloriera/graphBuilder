@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include <vector>
+#include "ofxXmlSettings.h"
 
 using namespace std;
 
@@ -39,6 +39,7 @@ public:
     void draw();
 
     void save(string fname);
+    void load(string fname);
 
     void mousePressed(int x,int y);
     void mouseDragged(int x,int y);
@@ -54,14 +55,11 @@ public:
 
     bool selected_node;
 
-    ofstream outputFile;
-
     ofColor color0, colorSelected;
 
     float dist;
     int id;
 
-
-
+    ofxXmlSettings XML;
 };
 //]

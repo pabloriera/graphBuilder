@@ -9,6 +9,10 @@ void testApp::setup(){
     background.resize(ofGetWindowWidth() , ofGetWindowHeight());
     z0 = 1.2;
     z = 1;
+
+    graph.load("1.graphml");
+    instance = 1;
+
 }
 
 //--------------------------------------------------------------
@@ -56,12 +60,6 @@ void testApp::keyPressed(int key){
         show_image = !show_image;
     }
 
-    if (key=='s')
-    {
-        graph.save("graph.out");
-    }
-
-
     if (key=='w'){
 
     cout << "ofgetwidth " << ofGetWidth() << "ofgetwidth " <<ofGetHeight() << endl;
@@ -75,6 +73,20 @@ void testApp::keyPressed(int key){
         graph.del_node();
     }
 
+    if (key=='1')
+    {
+        graph.load("1.graphml");
+        instance = 1;
+    }
+    if (key=='2')
+    {
+        graph.load("2.graphml");
+        instance = 2;
+    }
+    if (key=='s')
+    {
+        graph.save((ofToString(instance)+".graphml"));
+    }
 
 }
 

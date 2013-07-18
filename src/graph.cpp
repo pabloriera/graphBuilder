@@ -10,6 +10,7 @@ graph_t::graph_t()
     selected_node = false;
     color0 = ofColor::fromHsb( 85, 10, 255 );
     colorSelected = ofColor::fromHsb( 85, 160, 180 );
+     XML.setVerbose(true);
 }
 
 void  graph_t::add_node(int x,int y)
@@ -87,8 +88,8 @@ void graph_t::del_node(){
 
 void  graph_t::clear_all()
 {
-    /*nodes.clear();
-    selected_node = false;*/
+    nodes.clear();
+    selected_node = false;
 }
 
 
@@ -211,25 +212,116 @@ void  graph_t::draw()
     }
 
 }
-void  graph_t::save(string fname)
+void  graph_t::save(string xml_file_name)
 {
-/*
-    outputFile.open(fname.c_str());
 
-    for (size_t i = 0; i <  nodes.size(); i ++)
+
+    XML.clear();
+
+    XML.addTag("graphml");
+    XML.pushTag("graphml");
+    XML.addTag("graph");
+    XML.pushTag("graph");
+
+    for(size_t i = 0;i < nodes.size();i++)
     {
-        outputFile << i << " ";
+        XML.addTag("node");
+        XML.pushTag("node");
+        XML.addValue("data",nodes[i]->pos.x);
+        XML.addValue("data",nodes[i]->pos.y);
+        XML.addAttribute("node","id",ofToString(i+1),i);
 
-        for(size_t j =0; j < nodes[i].to.size();j++)
-        {
-           outputFile << nodes[i].id << " ";
-        }
 
-        outputFile << endl;
-    }
+//
 
-    outputFile.close();*/
+
+        //XML.addTag("data");
+
+        //XML.setAttribute("data","key","x",i*2);
+
+
+        //XML.addTag("data");
+        //XML.setAttribute("data","key","y",i*2+1);
+        //XML.setValue("data",nodes[i]->pos.y,i*2+1);
+
+        //XML.popTag();
+   }
+
+   XML.popTag();
+   XML.popTag();
+
+   XML.saveFile(xml_file_name);
+
+   cout << xml_file_name << " saved!" <<endl;
 }
 
+void  graph_t::load(string xml_file_name)
+{
+
+    clear_all();
+
+
+    if( XML.loadFile(xml_file_name) ){
+		cout << xml_file_name << " loaded!" <<endl;
+	}else{
+		cout << "unable to load " << xml_file_name << " check data/ folder" << endl;
+	}
+
+    XML.pushTag("graphml",0);
+    XML.pushTag("graph",0);
+
+    for(int i = 0; i<XML.getNumTags("node");i++)
+    {
+        add_node(0.0,0.0);
+
+        actual_node->id = ofToInt(XML.getAttribute("node","id","nada",i))-1;
+
+        XML.pushTag("node",i);
+
+        for(int j = 0; j<XML.getNumTags("data"); j++)
+        {
+
+            string aux = XML.getAttribute("data","key","nada",j);
+
+
+            if(aux=="x")
+                actual_node->pos.x = (ofToFloat(XML.getValue("data","nada",j)) - 0.5)*ofGetWidth();
+
+
+
+            if(aux=="y")
+                actual_node->pos.y = -(ofToFloat(XML.getValue("data","nada",j)) - 0.5)*ofGetHeight();
+
+
+        }
+
+        XML.popTag();
+
+    }
+
+
+
+    for(int i = 0; i<XML.getNumTags("edge");i++)
+    {
+        string source = XML.getAttribute("edge","source","nada",i);
+        string target = XML.getAttribute("edge","target","nada",i);
+
+        int sour;
+        int targ;
+
+        for(size_t j = 0; j < nodes.size(); j++)
+        {
+            if (nodes[j]->id == ofToInt(source))
+                    sour = j;
+            if (nodes[j]->id == ofToInt(target))
+                    targ = j;
+        }
+
+        nodes[sour]->to.push_back(nodes[targ]);
+    }
+
+    XML.popTag();
+    XML.popTag();
+}
 
 
