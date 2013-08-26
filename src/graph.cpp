@@ -1,5 +1,8 @@
 #include "graph.h"
-//#include <strings>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include "igraph/igraph.h"
 
 
 graph_t::graph_t()
@@ -10,7 +13,6 @@ graph_t::graph_t()
     selected_node = false;
     color0 = ofColor::fromHsb( 85, 10, 255 );
     colorSelected = ofColor::fromHsb( 85, 160, 180 );
-     XML.setVerbose(true);
 }
 
 void  graph_t::add_node(int x,int y)
@@ -89,6 +91,8 @@ void graph_t::del_node(){
 void  graph_t::clear_all()
 {
     nodes.clear();
+    n_nodes = 0;
+    id = 0;
     selected_node = false;
 }
 
@@ -214,114 +218,127 @@ void  graph_t::draw()
 }
 void  graph_t::save(string xml_file_name)
 {
+    igraph_i_set_attribute_table(&igraph_cattribute_table);
 
 
-    XML.clear();
+    igraph_t g;
 
-    XML.addTag("graphml");
-    XML.pushTag("graphml");
-    XML.addTag("graph");
-    XML.pushTag("graph");
 
-    for(size_t i = 0;i < nodes.size();i++)
+    igraph_vector_t v;
+
+    size_t edge_n = 0;
+
+    for(size_t i = 0; i<nodes.size();i++)
+        edge_n += nodes[i]->to.size();
+
+    igraph_vector_init(&v, edge_n*2);
+    size_t c = 0;
+
+    for(size_t i = 0; i<nodes.size();i++)
     {
-        XML.addTag("node");
-        XML.pushTag("node");
-        XML.addValue("data",nodes[i]->pos.x);
-        XML.addValue("data",nodes[i]->pos.y);
-        XML.addAttribute("node","id",ofToString(i+1),i);
+        for(size_t j = 0; j<nodes[i]->to.size();j++)
+            {
+                cout << nodes[i]->to[j]->id << endl;
+                VECTOR(v)[c]=i;VECTOR(v)[c+1]=nodes[i]->to[j]->id;
+                c+=2;
+            }
+    }
+    igraph_create(&g, &v, 0, 1);
+
+    for(size_t i = 0; i<nodes.size();i++)
+    {
+        SETVAN(&g, "x", i, nodes[i]->pos.x);
+        SETVAN(&g, "y", i, nodes[i]->pos.y);
+    }
 
 
-//
 
+    FILE *ifile;
+    ifile=fopen(xml_file_name.c_str(), "w");
+    igraph_write_graph_graphml(&g,ifile);
+    igraph_destroy(&g);
+    igraph_vector_destroy(&v);
+    fclose(ifile);
 
-        //XML.addTag("data");
-
-        //XML.setAttribute("data","key","x",i*2);
-
-
-        //XML.addTag("data");
-        //XML.setAttribute("data","key","y",i*2+1);
-        //XML.setValue("data",nodes[i]->pos.y,i*2+1);
-
-        //XML.popTag();
-   }
-
-   XML.popTag();
-   XML.popTag();
-
-   XML.saveFile(xml_file_name);
-
-   cout << xml_file_name << " saved!" <<endl;
 }
 
 void  graph_t::load(string xml_file_name)
 {
 
-    clear_all();
+    igraph_i_set_attribute_table(&igraph_cattribute_table);
 
+ /*   igraph_vector_t gtypes, vtypes, etypes;
+    igraph_strvector_t gnames, vnames, enames;
 
-    if( XML.loadFile(xml_file_name) ){
-		cout << xml_file_name << " loaded!" <<endl;
-	}else{
-		cout << "unable to load " << xml_file_name << " check data/ folder" << endl;
-	}
+    igraph_vector_init(&gtypes, 0);
+    igraph_vector_init(&vtypes, 0);
+    igraph_vector_init(&etypes, 0);
+    igraph_strvector_init(&gnames, 0);
+    igraph_strvector_init(&vnames, 0);
+    igraph_strvector_init(&enames, 0);
 
-    XML.pushTag("graphml",0);
-    XML.pushTag("graph",0);
+    //igraph_cattribute_list(&g, &gnames, &gtypes, &vnames, &vtypes, &enames, &etypes);
+*/
 
-    for(int i = 0; i<XML.getNumTags("node");i++)
+    FILE *ifile;
+    ifile=fopen(xml_file_name.c_str(), "r");
+
+    if (ifile==0)
     {
-        add_node(0.0,0.0);
+        cout << "File " << xml_file_name << " missing"<< endl;
+        //fclose(ifile);
+    }
+    else
+    {
+        clear_all();
 
-        actual_node->id = ofToInt(XML.getAttribute("node","id","nada",i))-1;
+        igraph_vector_t v;
+        igraph_t g;
 
-        XML.pushTag("node",i);
+        igraph_read_graph_graphml(&g,ifile,0);
+        fclose(ifile);
 
-        for(int j = 0; j<XML.getNumTags("data"); j++)
+        for(int i=0; i<igraph_vcount(&g); i++)
         {
 
-            string aux = XML.getAttribute("data","key","nada",j);
-
-
-            if(aux=="x")
-                actual_node->pos.x = (ofToFloat(XML.getValue("data","nada",j)) - 0.5)*ofGetWidth();
-
-
-
-            if(aux=="y")
-                actual_node->pos.y = -(ofToFloat(XML.getValue("data","nada",j)) - 0.5)*ofGetHeight();
-
-
+            add_node(0.0,0.0);
+            actual_node->id = i;
+            actual_node->to.clear();
+            actual_node->pos.x = VAN(&g,"x",i);
+            actual_node->pos.y = VAN(&g,"y",i);
         }
 
-        XML.popTag();
+        igraph_vector_init(&v,0);
+        igraph_get_edgelist(&g,&v,false);
 
-    }
+       // cout << igraph_vector_size(&v) << endl;
+        //cout << igraph_ecount(&g) << endl;
 
+        for(int i=0; i<igraph_vector_size(&v); i+=2)
 
-
-    for(int i = 0; i<XML.getNumTags("edge");i++)
-    {
-        string source = XML.getAttribute("edge","source","nada",i);
-        string target = XML.getAttribute("edge","target","nada",i);
-
-        int sour;
-        int targ;
-
-        for(size_t j = 0; j < nodes.size(); j++)
         {
-            if (nodes[j]->id == ofToInt(source))
-                    sour = j;
-            if (nodes[j]->id == ofToInt(target))
-                    targ = j;
+
+            //cout << VECTOR(v)[i]<< " " << VECTOR(v)[i+1] << endl;
+
+            int sour = VECTOR(v)[i];
+            int targ = VECTOR(v)[i+1];
+
+            //cout << sour << " " << targ << endl;
+
+          /*  for(size_t j = 0; j < nodes.size(); j++)
+            {
+                if (nodes[j]->id == ofToInt(source))
+                        sour = j;
+                if (nodes[j]->id == ofToInt(target))
+                        targ = j;
+            }*/
+
+            nodes[sour]->to.push_back(nodes[targ]);
         }
 
-        nodes[sour]->to.push_back(nodes[targ]);
+        igraph_destroy(&g);
+        igraph_vector_destroy(&v);
     }
-
-    XML.popTag();
-    XML.popTag();
 }
 
 

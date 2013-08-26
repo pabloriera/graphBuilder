@@ -2,18 +2,24 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
 	<File name="src/graph.cpp" open="1" top="1" tabpos="4">
-		<Cursor position="2674" topLine="112" />
+		<Cursor position="6253" topLine="105" />
 	</File>
 	<File name="src/graph.h" open="1" top="0" tabpos="5">
-		<Cursor position="0" topLine="0" />
+		<Cursor position="34" topLine="12" />
 	</File>
 	<File name="src/main.cpp" open="1" top="0" tabpos="1">
 		<Cursor position="0" topLine="0" />
 	</File>
 	<File name="src/testApp.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="0" topLine="0" />
+		<Cursor position="1717" topLine="72" />
 	</File>
 	<File name="src/testApp.h" open="1" top="0" tabpos="3">
-		<Cursor position="0" topLine="0" />
+		<Cursor position="606" topLine="9" />
+	</File>
+	<File name="../../../../usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="7897" topLine="316" />
+	</File>
+	<File name="../../../../usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.h" open="0" top="0" tabpos="0">
+		<Cursor position="4097" topLine="33" />
 	</File>
 </CodeBlocks_layout_file>

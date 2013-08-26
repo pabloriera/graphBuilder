@@ -3,14 +3,14 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 
-    show_image = false;
+    show_image = true;
 
     background.loadImage("Delta.tif");
     background.resize(ofGetWindowWidth() , ofGetWindowHeight());
     z0 = 1.2;
     z = 1;
 
-    graph.load("1.graphml");
+    graph.load("data/1.gxl");
     instance = 1;
 
 }
@@ -75,17 +75,19 @@ void testApp::keyPressed(int key){
 
     if (key=='1')
     {
-        graph.load("1.graphml");
+        graph.load("data/1.gxl");
         instance = 1;
     }
+
     if (key=='2')
     {
-        graph.load("2.graphml");
+        graph.load("data/2.gxl");
         instance = 2;
     }
+
     if (key=='s')
     {
-        graph.save((ofToString(instance)+".graphml"));
+        graph.save( "data/"+ofToString(instance)+".gxl");
     }
 
 }

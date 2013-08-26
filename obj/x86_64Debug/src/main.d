@@ -250,8 +250,6 @@ obj/x86_64Debug/src/main.o: src/main.cpp \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/3d/ofCamera.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/3d/ofEasyCam.h \
  src/testApp.h src/graph.h \
- /usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.h \
- /usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/libs/tinyxml.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/app/ofAppGlutWindow.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/app/ofAppBaseWindow.h
 
@@ -790,10 +788,6 @@ obj/x86_64Debug/src/main.o: src/main.cpp \
 src/testApp.h:
 
 src/graph.h:
-
-/usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.h:
-
-/usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/libs/tinyxml.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/app/ofAppGlutWindow.h:
 

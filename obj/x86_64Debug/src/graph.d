@@ -248,9 +248,7 @@ obj/x86_64Debug/src/graph.o: src/graph.cpp src/graph.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/video/ofVideoPlayer.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/video/ofGstVideoPlayer.h \
  /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/3d/ofCamera.h \
- /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/3d/ofEasyCam.h \
- /usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.h \
- /usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/libs/tinyxml.h
+ /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/3d/ofEasyCam.h
 
 src/graph.h:
 
@@ -785,7 +783,3 @@ src/graph.h:
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/3d/ofCamera.h:
 
 /usr/local/of_v0.7.4_linux64_release/libs/openFrameworks/3d/ofEasyCam.h:
-
-/usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.h:
-
-/usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/libs/tinyxml.h:
