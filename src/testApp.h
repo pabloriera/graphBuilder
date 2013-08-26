@@ -24,7 +24,8 @@ class testApp : public ofBaseApp{
         bool show_image;
 
         ofImage background;
-        float z, z0;
+        float z, z0,xoff,yoff;
+
 
         int instance;
 

@@ -13,6 +13,9 @@ void testApp::setup(){
     graph.load("data/1.gxl");
     instance = 1;
 
+    yoff = 0.0;
+    xoff = 0.0;
+
 }
 
 //--------------------------------------------------------------
@@ -26,7 +29,7 @@ void testApp::draw(){
 
     ofBackgroundGradient(ofColor(60,60,60), ofColor(10,10,10));
 
-    ofTranslate(ofGetWindowWidth() / 2.0, ofGetWindowHeight() / 2.0 );
+    ofTranslate(ofGetWindowWidth() / 2.0+xoff, ofGetWindowHeight() / 2.0 +yoff);
 
     ofScale(z,z,1);
 
@@ -100,33 +103,37 @@ void testApp::keyReleased(int key){
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
 
-    x = (x - ofGetWindowWidth()  / 2.0);
-    y = (y - ofGetWindowHeight() / 2.0);
+    x = (x - ofGetWindowWidth()  / 2.0 - xoff);
+    y = (y - ofGetWindowHeight() / 2.0) - yoff;
 
 }
 
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
 
-    if(button==0){
+    if(button==0)
+    {
 
-        x = (x - ofGetWindowWidth()  / 2.0)/z;
-        y = (y - ofGetWindowHeight() / 2.0)/z;
+        x = (x - ofGetWindowWidth()  / 2.0-xoff)/z;
+        y = (y - ofGetWindowHeight() / 2.0-yoff)/z;
 
         graph.mouseDragged(x,y);
     }
+
 
 }
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
 
-    x = (x - ofGetWindowWidth()  / 2.0)/z;
-    y = (y - ofGetWindowHeight() / 2.0)/z;
+    int _x, _y;
+
+    _x = (x - ofGetWindowWidth()  / 2.0-xoff)/z;
+    _y = (y - ofGetWindowHeight() / 2.0-yoff)/z;
 
     if(button==0){
 
-        graph.mousePressed(x,y);
+        graph.mousePressed(_x,_y);
     }
 
     if(button==3){
@@ -139,7 +146,14 @@ void testApp::mousePressed(int x, int y, int button){
 
     if(button==2)
     {
-        graph.connect(x,y);
+        graph.connect(_x,_y);
+    }
+
+    if(button==2)
+    {
+        xoff = -_x;
+        yoff = -_y;
+
     }
 
 }

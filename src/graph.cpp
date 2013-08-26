@@ -238,7 +238,7 @@ void  graph_t::save(string xml_file_name)
     {
         for(size_t j = 0; j<nodes[i]->to.size();j++)
             {
-                cout << nodes[i]->to[j]->id << endl;
+                //cout << nodes[i]->to[j]->id << endl;
                 VECTOR(v)[c]=i;VECTOR(v)[c+1]=nodes[i]->to[j]->id;
                 c+=2;
             }
