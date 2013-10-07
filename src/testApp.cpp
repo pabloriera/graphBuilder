@@ -7,10 +7,10 @@ void testApp::setup(){
 
     background.loadImage("Delta.tif");
     background.resize(ofGetWindowWidth() , ofGetWindowHeight());
-    z0 = 1.2;
+    z0 = 1.0;
     z = 1;
 
-    graph.load("data/1.gxl");
+    B.load("data/1.graphml");
     instance = 1;
 
     yoff = 0.0;
@@ -42,7 +42,7 @@ void testApp::draw(){
         background.draw(-ofGetWindowWidth() / 2.0,- ofGetWindowHeight() / 2.0 );
     }
 
-    graph.draw();
+    B.draw();
     ofDisableAlphaBlending();
 
 
@@ -53,7 +53,7 @@ void testApp::keyPressed(int key){
 
     if (key=='e'){
 
-    graph.clear_all();
+    B.clear_all();
 
     }
 
@@ -73,24 +73,24 @@ void testApp::keyPressed(int key){
 
     if (key==127)
     {
-        graph.del_node();
+        B.del_node();
     }
 
     if (key=='1')
     {
-        graph.load("data/1.gxl");
+        B.load("data/1.graphml");
         instance = 1;
     }
 
     if (key=='2')
     {
-        graph.load("data/2.gxl");
+        B.load("data/2.graphml");
         instance = 2;
     }
 
     if (key=='s')
     {
-        graph.save( "data/"+ofToString(instance)+".gxl");
+        B.save( "data/"+ofToString(instance)+".graphml");
     }
 
 }
@@ -114,10 +114,16 @@ void testApp::mouseDragged(int x, int y, int button){
     if(button==0)
     {
 
+
+
         x = (x - ofGetWindowWidth()  / 2.0-xoff)/z;
         y = (y - ofGetWindowHeight() / 2.0-yoff)/z;
 
-        graph.mouseDragged(x,y);
+        //xoff = x-x0;
+        //yoff = y-y0;
+
+
+        B.mouseDragged(x,y);
     }
 
 
@@ -126,15 +132,17 @@ void testApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
 
+
     int _x, _y;
 
     _x = (x - ofGetWindowWidth()  / 2.0-xoff)/z;
     _y = (y - ofGetWindowHeight() / 2.0-yoff)/z;
 
-    if(button==0){
+    x0 = _x;
+    y0 = _y;
 
-        graph.mousePressed(_x,_y);
-    }
+
+    int sel = B.mousePressed(_x,_y,button);
 
     if(button==3){
         z *= z0;
@@ -144,18 +152,13 @@ void testApp::mousePressed(int x, int y, int button){
         z /= z0;
     }
 
-    if(button==2)
-    {
-        graph.connect(_x,_y);
-    }
-
-    if(button==2)
+    /*if(sel==-1 && button==2)
     {
         xoff = -_x;
         yoff = -_y;
 
     }
-
+        */
 }
 
 //--------------------------------------------------------------

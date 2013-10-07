@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graph.h"
+#include "behavior.h"
 #include "ofMain.h"
 
 class testApp : public ofBaseApp{
@@ -20,14 +20,11 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-		graph_t graph;
+		behavior_t B;
         bool show_image;
 
         ofImage background;
         float z, z0,xoff,yoff;
-
-
+        int x0,y0;
         int instance;
-
-
 };

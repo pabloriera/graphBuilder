@@ -4,61 +4,48 @@
 
 using namespace std;
 
-// type for idxex of rivers or nodes or small? things
-typedef unsigned int idx_int;
-typedef vector<idx_int> vec_idx;
-typedef vector<double> vec_double;
-typedef vector<bool> vec_bool;
 
 class node_t
 {
-public:
-    //node_t() {to.clear();};
-    ofVec2f pos;
-	bool selected;
-    idx_int type;
-    double rad;
-    int id;
-    vector <node_t*> to;
+    public:
+
+        int id;
+        vector <node_t*> to;
+
+        //basic atributes
+        ofVec2f pos;
+        bool selected;
+        double rad;
+
+        vector <string> att_str;
+        vector <float> att_float;
 };
 
-// nodos
+class link_t
+{
+    public:
+
+        int id;
+
+        node_t *from,*to;
+
+        //atributes
+        bool selected;
+        size_t type;
+};
+
+
 class graph_t
 {
 
-public:
+    public:
 
-    graph_t();
+        graph_t(){};
 
-    void clear_all();
-    void add_node(int x, int y);
-    void del_node();
-    void connect(int x, int y);
+        vector <node_t*> nodes;
+        vector <link_t*> links;
+        vector <string> att_names;
 
-    void draw();
-
-    void save(string fname);
-    void load(string fname);
-
-    void mousePressed(int x,int y);
-    void mouseDragged(int x,int y);
-
-
-    int node_near(int x, int y);
-
-    vector <node_t*> nodes;
-    int n_nodes;
-
-    node_t *actual_node;
-    node_t *old_node;
-
-    bool selected_node;
-
-    ofColor color0, colorSelected;
-
-    float dist;
-    int id;
-
-    //ofxXmlSettings XML;
+        int n_nodes;
+        int n_links;
 };
-//]

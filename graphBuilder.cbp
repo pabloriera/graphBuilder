@@ -38,6 +38,8 @@
 		<Unit filename="config.make">
 			<Option virtualFolder="build config" />
 		</Unit>
+		<Unit filename="src/behavior.cpp" />
+		<Unit filename="src/behavior.h" />
 		<Unit filename="src/graph.cpp" />
 		<Unit filename="src/graph.h" />
 		<Unit filename="src/main.cpp">
@@ -49,8 +51,6 @@
 		<Unit filename="src/testApp.h">
 			<Option virtualFolder="src/" />
 		</Unit>
-		<Unit filename="../../../../usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.cpp" />
-		<Unit filename="../../../../usr/local/of_v0.7.4_linux64_release/addons/ofxXmlSettings/src/ofxXmlSettings.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
