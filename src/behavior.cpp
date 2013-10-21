@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "igraph/igraph.h"
+
 
 #define nodes (G->nodes)
 #define links (G->links)
