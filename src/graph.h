@@ -16,7 +16,7 @@ class node_t
         ofVec2f pos;
         bool selected;
         double rad;
-        string type;
+        size_t type;
         string label;
 
         //vector <string> att_str;
@@ -46,7 +46,7 @@ class graph_t
 
         vector <node_t*> nodes;
         vector <link_t*> links;
-        vector <string> att_names;
+        //vector <string> att_names;
 
         int n_nodes;
         int n_links;

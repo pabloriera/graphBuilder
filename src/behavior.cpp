@@ -12,11 +12,23 @@ behavior_t::behavior_t()
     G = new graph_t;
 
     actual_node = NULL;
+    actual_link = NULL;
+    actual_type = 0;
     selected_node = false;
+    selected_link =  false;
 
-    color0 = ofColor::fromHsb( 85, 10, 255 );
-    colorNodeSelected = ofColor::fromHsb( 85, 160, 180 );
+    color0 = ofColor::fromHsb( 85, 10, 220 );
+
+    colorNodeTypes.assign(3, ofColor());
+
+    colorNodeTypes[0] = color0;
+    colorNodeTypes[1] = ofColor::fromHsb( 85, 250, 180 );
+    colorNodeTypes[2] = ofColor::fromHsb( 0, 250, 180 );
+    colorNodeTypes[3] = ofColor::fromHsb( 180,250, 180 );
+
     colorLinkSelected = ofColor::fromHsb( 10, 200, 250 );
+
+    types_n = 4;
 }
 
 void  behavior_t::add_node(int x,int y)
@@ -27,7 +39,7 @@ void  behavior_t::add_node(int x,int y)
     actual_node->pos.x = x;
     actual_node->pos.y = y;
     actual_node->id = id;
-    actual_node->type = "o";
+    actual_node->type = actual_type;
     id++;
     //actual_node.type = type;
     actual_node->rad = 8;
@@ -48,6 +60,7 @@ void  behavior_t::add_node(int x,int y)
     else
         selected_node = true;
 
+    update_type();
 }
 
 void behavior_t::del_node(){
@@ -58,8 +71,8 @@ void behavior_t::del_node(){
         cout << links.size() << endl;
         for(size_t i=0; i < links.size(); i++)
         {
-            cout << "From " << links[i]->from->id << endl;
-            cout << "To " << links[i]->to->id << endl;
+            //cout << "From " << links[i]->from->id << endl;
+            //cout << "To " << links[i]->to->id << endl;
 
             if(links[i]->from == actual_node || links[i]->to == actual_node )
             {
@@ -86,17 +99,57 @@ void behavior_t::del_node(){
         }
         else
         {
-            actual_node=NULL;
-            selected_node=false;
+            clear_all();
         }
     }
 }
+
+
+void behavior_t::change_type()
+{
+    actual_type = actual_node->type;
+    actual_type++;
+    if (actual_type>types_n-1)
+        actual_type = 0;
+
+    actual_node->type = actual_type;
+
+    update_type();
+}
+
+void behavior_t::update_type()
+{
+    for (size_t i = 0; i <  nodes.size(); i ++)
+    {
+        if (degree(nodes[i]->id) >= 2)
+        {
+            nodes[i]->type = 0;
+        }
+    }
+
+}
+
+int behavior_t::degree(int id)
+{
+    int degree=0;
+    for(size_t i=0; i < links.size(); i++)
+    {
+        if(links[i]->from->id == id)
+            degree++;
+        if(links[i]->to->id == id)
+            degree++;
+    }
+
+    return degree;
+}
+
 
 void  behavior_t::clear_all()
 {
     nodes.clear();
     links.clear();
     id = 0;
+    actual_node=NULL;
     selected_node = false;
 }
 
@@ -186,9 +239,12 @@ void behavior_t::connect(int sel)
             actual_node = nodes[sel];
 
             actual_link = new link_t;
+            actual_link->shape=0;
             actual_link->from = old_node;
             actual_link->to = actual_node;
             links.push_back(actual_link );
+
+            actual_link->selected=false;
 
             actual_node->selected = true;
             old_node->selected = false;
@@ -286,13 +342,14 @@ void behavior_t::draw()
         if (nodes[i]->selected)
         {
             ofFill();
-            ofSetColor(colorNodeSelected);
+            ofSetColor(colorNodeTypes[nodes[i]->type]);
             ofCircle(nodes[i]->pos.x,nodes[i]->pos.y,nodes[i]->rad*1.2);
         }
         else
         {
+            ofSetLineWidth(3.0);
             ofNoFill();
-            ofSetColor(color0);
+            ofSetColor(colorNodeTypes[nodes[i]->type]);
             ofCircle(nodes[i]->pos.x,nodes[i]->pos.y,nodes[i]->rad);
         }
 
@@ -331,8 +388,9 @@ void behavior_t::save(string xml_file_name)
     {
         SETVAN(&g, "x", nodes[i]->id, nodes[i]->pos.x);
         SETVAN(&g, "y", nodes[i]->id, -nodes[i]->pos.y);
+        SETVAN(&g, "type",nodes[i]->id, nodes[i]->type);
         SETVAS(&g, "label",nodes[i]->id, " ");
-        SETVAS(&g, "type",nodes[i]->id, nodes[i]->type.c_str());
+
     }
 
     FILE *ifile;
@@ -369,21 +427,21 @@ void behavior_t::load(string xml_file_name)
 
         for(int i=0; i<igraph_vcount(&g); i++)
         {
-
             add_node(0.0,0.0);
             actual_node->id = i;
             //actual_node->to.clear();
             actual_node->pos.x = VAN(&g,"x",i);
             actual_node->pos.y = -VAN(&g,"y",i);
             actual_node->label = VAS(&g,"label",i);
-            actual_node->type = VAS(&g,"type",i);
-
         }
+
 
         links.clear();
 
         igraph_vector_init(&v,0);
         igraph_get_edgelist(&g,&v,false);
+
+        size_t c = 0;
 
         for(int i=0; i<igraph_vector_size(&v); i+=2)
         {
@@ -391,11 +449,20 @@ void behavior_t::load(string xml_file_name)
             int target = VECTOR(v)[i+1];
 
             actual_link = new link_t;
+            actual_link->shape =  EAN(&g,"shape",c);
             actual_link->selected = false;
             actual_link->from = nodes[source];
             actual_link->to = nodes[target];
             links.push_back(actual_link );
+            c++;
+
         }
+
+        for(int i=0; i<nodes.size(); i++)
+        {
+            nodes[i]->type = VAN(&g,"type",i);
+        }
+
 
         igraph_destroy(&g);
         igraph_vector_destroy(&v);
@@ -407,8 +474,6 @@ void behavior_t::load(string xml_file_name)
 
 void behavior_t::print_graph()
 {
-
-
     for(size_t i = 0; i<links.size();i++)
     {
         cout << "Link " << i  << " "  << links[i]->from->id << "->" << links[i]->to->id << endl;
@@ -416,10 +481,6 @@ void behavior_t::print_graph()
 
     for(size_t i = 0; i<nodes.size();i++)
     {
-        cout << "Node " << nodes[i]->id  << " ("  << nodes[i]->pos.x << "," << -nodes[i]->pos.y << ")" <<endl;;
+        cout << "Node " << nodes[i]->id  << " " << nodes[i]->type << " ("  << nodes[i]->pos.x << "," << -nodes[i]->pos.y << ")" <<endl;;
     }
-
-
 }
-
-

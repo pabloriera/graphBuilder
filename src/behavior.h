@@ -18,12 +18,15 @@ public:
     void del_node();
     void connect(int sel);
     void change_type();
+    int degree(int id);
+    void update_type();
 
     void draw();
 
     void save(string fname);
     void load(string fname);
     void print_graph();
+
 
     int mousePressed(int x,int y, int button);
     void mouseDragged(int x,int y);
@@ -46,5 +49,9 @@ public:
 
     int id;
 
+    vector <string> types;
+    vector <ofColor> colorNodeTypes;
+    size_t types_n;
+    size_t actual_type;
 };
 

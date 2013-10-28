@@ -6,110 +6,59 @@
 <!-- Created by igraph -->
   <key id="x" for="node" attr.name="x" attr.type="double"/>
   <key id="y" for="node" attr.name="y" attr.type="double"/>
+  <key id="type" for="node" attr.name="type" attr.type="double"/>
   <key id="label" for="node" attr.name="label" attr.type="string"/>
-  <key id="type" for="node" attr.name="type" attr.type="string"/>
   <key id="shape" for="edge" attr.name="shape" attr.type="double"/>
   <graph id="G" edgedefault="directed">
     <node id="n0">
+      <data key="x">-189</data>
+      <data key="y">112</data>
+      <data key="type">2</data>
       <data key="label"> </data>
-      <data key="type">o</data>
     </node>
     <node id="n1">
-      <data key="x">-41</data>
-      <data key="y">52</data>
+      <data key="x">12</data>
+      <data key="y">76</data>
+      <data key="type">0</data>
       <data key="label"> </data>
-      <data key="type">o</data>
     </node>
     <node id="n2">
-      <data key="x">62</data>
-      <data key="y">-13</data>
+      <data key="x">133</data>
+      <data key="y">28</data>
+      <data key="type">0</data>
       <data key="label"> </data>
-      <data key="type">o</data>
     </node>
     <node id="n3">
-      <data key="x">-73</data>
-      <data key="y">-127</data>
+      <data key="x">294</data>
+      <data key="y">183</data>
+      <data key="type">2</data>
       <data key="label"> </data>
-      <data key="type">o</data>
     </node>
     <node id="n4">
+      <data key="x">-38</data>
+      <data key="y">-11</data>
+      <data key="type">2</data>
       <data key="label"> </data>
-      <data key="type">o</data>
     </node>
     <node id="n5">
+      <data key="x">108</data>
+      <data key="y">108</data>
+      <data key="type">2</data>
       <data key="label"> </data>
-      <data key="type">o</data>
     </node>
-    <node id="n6">
-      <data key="x">-254</data>
-      <data key="y">103</data>
-      <data key="label"> </data>
-      <data key="type">o</data>
-    </node>
-    <node id="n7">
-      <data key="x">-244</data>
-      <data key="y">212</data>
-      <data key="label"> </data>
-      <data key="type">o</data>
-    </node>
-    <node id="n8">
-      <data key="x">-128</data>
-      <data key="y">275</data>
-      <data key="label"> </data>
-      <data key="type">o</data>
-    </node>
-    <node id="n9">
-      <data key="x">204</data>
-      <data key="y">33</data>
-      <data key="label"> </data>
-      <data key="type">o</data>
-    </node>
-    <node id="n10">
-      <data key="x">325</data>
-      <data key="y">128</data>
-      <data key="label"> </data>
-      <data key="type">o</data>
-    </node>
-    <node id="n11">
-      <data key="x">113</data>
-      <data key="y">113</data>
-      <data key="label"> </data>
-      <data key="type">o</data>
-    </node>
-    <node id="n12">
-      <data key="x">-60</data>
-      <data key="y">169</data>
-      <data key="label"> </data>
-      <data key="type">o</data>
-    </node>
-    <node id="n13">
-      <data key="x">186</data>
-      <data key="y">244</data>
-      <data key="label"> </data>
-      <data key="type">o</data>
-    </node>
-    <edge source="n6" target="n7">
-      <data key="shape">4.29497e+09</data>
+    <edge source="n0" target="n1">
+      <data key="shape">1</data>
     </edge>
     <edge source="n1" target="n2">
       <data key="shape">0</data>
     </edge>
     <edge source="n2" target="n3">
-      <data key="shape">4.25895e+07</data>
-    </edge>
-    <edge source="n7" target="n8">
       <data key="shape">0</data>
     </edge>
-    <edge source="n9" target="n10">
-      <data key="shape">4.27258e+07</data>
-    </edge>
-    <edge source="n10" target="n11">
+    <edge source="n1" target="n4">
       <data key="shape">0</data>
     </edge>
-    <edge source="n11" target="n12">
-      <data key="shape">1</data>
-    </edge>
-    <edge source="n12" target="n13">
+    <edge source="n2" target="n5">
       <data key="shape">0</data>
     </edge>
   </graph>
