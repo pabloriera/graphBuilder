@@ -17,11 +17,13 @@ public:
     void add_node(int x, int y);
     void del_node();
     void connect(int sel);
+    void change_type();
 
     void draw();
 
     void save(string fname);
     void load(string fname);
+    void print_graph();
 
     int mousePressed(int x,int y, int button);
     void mouseDragged(int x,int y);

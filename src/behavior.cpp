@@ -16,7 +16,7 @@ behavior_t::behavior_t()
 
     color0 = ofColor::fromHsb( 85, 10, 255 );
     colorNodeSelected = ofColor::fromHsb( 85, 160, 180 );
-    colorLinkSelected = ofColor::fromHsb( 10, 160, 180 );
+    colorLinkSelected = ofColor::fromHsb( 10, 200, 250 );
 }
 
 void  behavior_t::add_node(int x,int y)
@@ -27,6 +27,7 @@ void  behavior_t::add_node(int x,int y)
     actual_node->pos.x = x;
     actual_node->pos.y = y;
     actual_node->id = id;
+    actual_node->type = "o";
     id++;
     //actual_node.type = type;
     actual_node->rad = 8;
@@ -34,13 +35,13 @@ void  behavior_t::add_node(int x,int y)
 
     nodes.push_back(actual_node);
 
-    actual_link = new link_t;
-    actual_link->selected = false;
-    actual_link->from = old_node;
-    actual_link->to   = actual_node;
-
-    if (selected_node) //prevents failure at start
+    if (selected_node) //prevents failure at new disconencted nodes
     {
+        actual_link = new link_t;
+        actual_link->shape = 0;
+        actual_link->selected = false;
+        actual_link->from = old_node;
+        actual_link->to   = actual_node;
         links.push_back(actual_link);
         old_node->selected=false;
     }
@@ -53,12 +54,19 @@ void behavior_t::del_node(){
 
     if (actual_node!=NULL && selected_node)
     {
+
+        cout << links.size() << endl;
         for(size_t i=0; i < links.size(); i++)
         {
-            if(links[i]->from == actual_node ||links[i]->to == actual_node )
+            cout << "From " << links[i]->from->id << endl;
+            cout << "To " << links[i]->to->id << endl;
+
+            if(links[i]->from == actual_node || links[i]->to == actual_node )
             {
+                cout << "delting " << i<<" link" << endl;
                 links[i] = links[links.size()-1];
                 links.pop_back();
+                i--;
             }
         }
 
@@ -227,6 +235,9 @@ int behavior_t::mousePressed(int x,int y,int button)
         else if(button==2)
         {
 
+            actual_link->selected = false;
+            selected_link = false;
+
             if (sel_node==-1)
                 add_node(x,y);
             else
@@ -249,17 +260,26 @@ void behavior_t::mouseDragged(int x,int y)
 
 void behavior_t::draw()
 {
-    ofSetLineWidth(2.0);
 
     for(size_t j = 0; j < links.size(); j++)
     {
         if(links[j]->selected)
+        {
+            ofSetLineWidth(4.0);
             ofSetColor(colorLinkSelected);
+        }
         else
+        {
             ofSetColor(color0);
+            ofSetLineWidth(2.0);
+
+        }
+
 
         ofLine( links[j]->from->pos.x, links[j]->from->pos.y,  links[j]->to->pos.x , links[j]->to->pos.y );
     }
+
+    ofSetLineWidth(2.0);
 
     for(size_t i = 0; i < nodes.size();i++)
     {
@@ -303,10 +323,16 @@ void behavior_t::save(string xml_file_name)
 
     igraph_create(&g, &v, 0, 1);
 
+
+    for(size_t i = 0; i<links.size();i++)
+        SETEAN(&g, "shape",i,links[i]->shape);
+
     for(size_t i = 0; i<nodes.size();i++)
     {
-        SETVAN(&g, "x", i, nodes[i]->pos.x);
-        SETVAN(&g, "y", i, nodes[i]->pos.y);
+        SETVAN(&g, "x", nodes[i]->id, nodes[i]->pos.x);
+        SETVAN(&g, "y", nodes[i]->id, -nodes[i]->pos.y);
+        SETVAS(&g, "label",nodes[i]->id, " ");
+        SETVAS(&g, "type",nodes[i]->id, nodes[i]->type.c_str());
     }
 
     FILE *ifile;
@@ -348,7 +374,10 @@ void behavior_t::load(string xml_file_name)
             actual_node->id = i;
             //actual_node->to.clear();
             actual_node->pos.x = VAN(&g,"x",i);
-            actual_node->pos.y = VAN(&g,"y",i);
+            actual_node->pos.y = -VAN(&g,"y",i);
+            actual_node->label = VAS(&g,"label",i);
+            actual_node->type = VAS(&g,"type",i);
+
         }
 
         links.clear();
@@ -373,5 +402,24 @@ void behavior_t::load(string xml_file_name)
     }
 }
 
+
+
+
+void behavior_t::print_graph()
+{
+
+
+    for(size_t i = 0; i<links.size();i++)
+    {
+        cout << "Link " << i  << " "  << links[i]->from->id << "->" << links[i]->to->id << endl;
+    }
+
+    for(size_t i = 0; i<nodes.size();i++)
+    {
+        cout << "Node " << nodes[i]->id  << " ("  << nodes[i]->pos.x << "," << -nodes[i]->pos.y << ")" <<endl;;
+    }
+
+
+}
 
 

@@ -7,14 +7,15 @@ void testApp::setup(){
 
     background.loadImage("Delta.tif");
     background.resize(ofGetWindowWidth() , ofGetWindowHeight());
-    z0 = 1.0;
-    z = 1;
 
     B.load("data/1.graphml");
     instance = 1;
 
+    off0 = 100;
     yoff = 0.0;
     xoff = 0.0;
+    z0 = 1.1;
+    z = 1;
 
 }
 
@@ -29,7 +30,7 @@ void testApp::draw(){
 
     ofBackgroundGradient(ofColor(60,60,60), ofColor(10,10,10));
 
-    ofTranslate(ofGetWindowWidth() / 2.0+xoff, ofGetWindowHeight() / 2.0 +yoff);
+    ofTranslate(ofGetWindowWidth() / 2.0 + xoff, ofGetWindowHeight() / 2.0 + yoff);
 
     ofScale(z,z,1);
 
@@ -45,20 +46,36 @@ void testApp::draw(){
     B.draw();
     ofDisableAlphaBlending();
 
-
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
-    if (key=='e'){
+    if (key==OF_KEY_LEFT)
+    {
+        xoff-=off0;
+    }
+    if (key==OF_KEY_RIGHT)
+    {
+        xoff+=off0;
+    }
+    if (key==OF_KEY_DOWN)
+    {
+        yoff+=off0;
+    }
+    if (key==OF_KEY_UP)
+    {
+        yoff-=off0;
+    }
 
-    B.clear_all();
+    if (key=='e')
+    {
+
+        B.clear_all();
 
     }
 
     if (key=='i')
-
     {
         show_image = !show_image;
     }
@@ -71,6 +88,11 @@ void testApp::keyPressed(int key){
 
     }
 
+    if (key=='p')
+    {
+        B.print_graph();
+    }
+
     if (key==127)
     {
         B.del_node();
@@ -78,12 +100,16 @@ void testApp::keyPressed(int key){
 
     if (key=='1')
     {
+
+        B.save( "data/"+ofToString(instance)+".graphml");
         B.load("data/1.graphml");
         instance = 1;
     }
 
     if (key=='2')
     {
+
+        B.save( "data/"+ofToString(instance)+".graphml");
         B.load("data/2.graphml");
         instance = 2;
     }
@@ -92,6 +118,12 @@ void testApp::keyPressed(int key){
     {
         B.save( "data/"+ofToString(instance)+".graphml");
     }
+
+    if (key=='t')
+    {
+        B.change_type();
+    }
+
 
 }
 
@@ -152,13 +184,6 @@ void testApp::mousePressed(int x, int y, int button){
         z /= z0;
     }
 
-    /*if(sel==-1 && button==2)
-    {
-        xoff = -_x;
-        yoff = -_y;
-
-    }
-        */
 }
 
 //--------------------------------------------------------------

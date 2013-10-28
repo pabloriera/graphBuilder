@@ -10,15 +10,17 @@ class node_t
     public:
 
         int id;
-        vector <node_t*> to;
+        //vector <node_t*> to;
 
         //basic atributes
         ofVec2f pos;
         bool selected;
         double rad;
+        string type;
+        string label;
 
-        vector <string> att_str;
-        vector <float> att_float;
+        //vector <string> att_str;
+        //vector <float> att_float;
 };
 
 class link_t
@@ -31,7 +33,7 @@ class link_t
 
         //atributes
         bool selected;
-        size_t type;
+        size_t shape;
 };
 
 
